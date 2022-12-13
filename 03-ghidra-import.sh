@@ -25,6 +25,7 @@ fi
 libpath="${1}"
 provider=$(basename $(readlink -f ${libpath}))
 
-"${ghidra_headless}" "${ghidra_proj}"  "${proj}" -import "${libpath}" -recursive -scriptPath ghidra_scripts -preScript FunctionIDHeadlessPrescriptMinimal.java -postScript FunctionIDHeadlessPostscript.java | tee -a "lib/${provider}-headless.log"
+mkdir -p work
+"${ghidra_headless}" "${ghidra_proj}"  "${proj}" -import "${libpath}" -recursive -scriptPath ghidra_scripts -preScript FunctionIDHeadlessPrescriptMinimal.java -postScript FunctionIDHeadlessPostscript.java | tee -a "work/${provider}-headless.log"
 
 

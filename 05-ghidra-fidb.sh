@@ -28,13 +28,17 @@ provider=$(basename $(readlink -f ${libpath}))
 mkdir -p "fidb"
 mkdir -p "log"
 
-rm "log/duplicate_results.txt"
+rm -f "log/duplicate_results.txt"
 touch "log/duplicate_results.txt"
 
-cat "lib/${provider}-langids.txt" | while read langid; do 
+touch work/${provider}-common.txt &>/dev/null
+
+cat "work/${provider}-langids.txt" | while read langid; do
 langid_dots="$(echo "${langid}" | sed 's/:/./g')"
 
-"${ghidra_headless}" "${ghidra_proj}" "${proj}" -noanalysis -scriptPath ghidra_scripts -preScript AutoCreateMultipleLibraries.java log/duplicate_results.txt true fidb "${provider}-${langid_dots}.fidb" "/${provider}" lib/${provider}-common.txt "${langid}"
+"${ghidra_headless}" "${ghidra_proj}" "${proj}" -noanalysis -scriptPath ghidra_scripts \
+    -preScript AutoCreateMultipleLibraries.java log/duplicate_results.txt true fidb \
+    "${provider}-${langid_dots}.fidb" "/${provider}" work/${provider}-common.txt "${langid}"
 
 done
 
